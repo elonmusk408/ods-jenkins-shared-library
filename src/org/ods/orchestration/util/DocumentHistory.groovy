@@ -155,7 +155,7 @@ class DocumentHistory {
 
     protected Map computeDocChaptersOfDocument(DocumentHistoryEntry entry) {
         def docIssues = SortUtil.sortHeadingNumbers(entry[JiraDataItem.TYPE_DOCS] ?: [], 'number')
-            .collect { [action: it.action, key: "${it.number} ${it.fields.summary}: ${it.key}", predecessors: it.predecessors.join(", ")] }
+            .collect { [action: it.action, key: "${it.number} ${it.summary}: ${it.key}", predecessors: it.predecessors.join(", ")] }
         return [ type: 'document sections',
                  (ADDED): docIssues.findAll { it.action == ADD },
                  (CHANGED): docIssues.findAll { it.action == CHANGE },
