@@ -160,6 +160,7 @@ class DocumentHistory {
                 if (it.action == CHANGE) {
                     issue.predecessors = it.predecessors.join(", ")
                 }
+                return issue
             }
         return [ type: 'documentation chapters',
                  (ADDED): docIssues.findAll { it.action == ADD },
