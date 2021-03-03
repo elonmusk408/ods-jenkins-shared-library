@@ -206,7 +206,7 @@ class DocumentHistory {
     private static Map computeIssueContent(String issueType, String action, Map issue) {
         def result = [key: issue.key, action: action]
         if (JiraDataItem.TYPE_DOCS.equalsIgnoreCase(issueType)) {
-            result << issue.subMap(['documents', 'number', 'name'])
+            result << issue.subMap(['documents', 'number', 'heading'])
         }
         if (action.equalsIgnoreCase(CHANGE)) {
             result << [predecessors: issue.predecessors]
