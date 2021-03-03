@@ -155,8 +155,13 @@ class DocumentHistory {
 
     protected Map computeDocChaptersOfDocument(DocumentHistoryEntry entry) {
         def docIssues = SortUtil.sortHeadingNumbers(entry[JiraDataItem.TYPE_DOCS] ?: [], 'number')
-            .collect { [action: it.action, key: "${it.number} ${it.fields.summary}: ${it.key}", predecessors: it.predecessors.join(", ")] }
-        return [ type: 'document sections',
+            .collect {
+                def issue = [action: it.action, key: "${it.number} ${it.heading}: ${it.key}"]
+                if (it.action == CHANGE) {
+                    issue.predecessors = it.predecessors.join(", ")
+                }
+            }
+        return [ type: 'documentation chapters',
                  (ADDED): docIssues.findAll { it.action == ADD },
                  (CHANGED): docIssues.findAll { it.action == CHANGE },
                  (DELETED): docIssues.findAll { it.action == DELETE },
@@ -200,7 +205,7 @@ class DocumentHistory {
     private static Map computeIssueContent(String issueType, String action, Map issue) {
         def result = [key: issue.key, action: action]
         if (JiraDataItem.TYPE_DOCS.equalsIgnoreCase(issueType)) {
-            result << issue.subMap(['documents', 'number', 'name', 'fields'])
+            result << issue.subMap(['documents', 'number', 'name'])
         }
         if (action.equalsIgnoreCase(CHANGE)) {
             result << [predecessors: issue.predecessors]
